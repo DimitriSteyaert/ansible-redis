@@ -1,0 +1,14 @@
+---
+- name: Add the Dotdeb apt key
+  apt_key:
+    url: https://www.dotdeb.org/dotdeb.gpg
+
+- name: Configure the Dotdeb repo
+  apt_repository:
+    filename: dotdeb
+    repo: 'deb http://packages.dotdeb.org jessie all'
+
+- name: Configure the Dotdeb src repo
+  apt_repository:
+    filename: dotdeb
+    repo: 'deb-src http://packages.dotdeb.org jessie all'

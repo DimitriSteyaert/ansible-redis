@@ -1,0 +1,6 @@
+---
+- name: Restart Redis
+  service:
+    name: redis
+    state: restarted
+  when: redis_server_install

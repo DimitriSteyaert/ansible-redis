@@ -1,0 +1,7 @@
+---
+- name: Ensure Redis server is running
+  service:
+    name: redis
+    enabled: yes
+    state: started
+  when: redis_server_install

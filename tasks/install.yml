@@ -1,0 +1,18 @@
+---
+- name: Install latest version of Redis
+  apt:
+    name: redis-server
+    state: "{{ redis_server_state }}"
+    purge: "{{ redis_server_purge }}"
+  when:
+    - redis_server_install
+    - redis_version == "latest"
+
+- name: Install specific version of Redis
+  apt:
+    name: "redis-server={{ redis_version }}"
+    state: "{{ redis_server_state }}"
+    purge: "{{ redis_server_purge }}"
+  when:
+    - redis_server_install
+    - redis_version != "latest"
