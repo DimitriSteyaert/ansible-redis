@@ -1,0 +1,4 @@
+---
+- include: sentinel/install.yml
+- include: sentinel/config.yml
+- include: sentinel/service.yml

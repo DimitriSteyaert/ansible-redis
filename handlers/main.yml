@@ -4,3 +4,9 @@
     name: redis
     state: restarted
   when: redis_server_install
+
+- name: Restart Redis Sentinel
+  service:
+    name: redis-sentinel
+    state: restarted
+  when: redis_sentinel_install

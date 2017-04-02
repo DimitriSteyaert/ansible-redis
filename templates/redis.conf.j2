@@ -275,7 +275,7 @@ slaveof {{ redis_slaveof }}
 # refuse the slave request.
 #
 # masterauth <master-password>
-{% if redis_slaveof -%}
+{% if redis_slaveof or redis_sentinel_install -%}
 masterauth {{ redis_password }}
 {% endif %}
 

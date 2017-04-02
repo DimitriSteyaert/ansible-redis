@@ -1,0 +1,7 @@
+---
+- name: Ensure Redis Sentinel is running
+  service:
+    name: redis-sentinel
+    enabled: yes
+    state: started
+  when: redis_sentinel_install

@@ -3,3 +3,5 @@
 - include: install.yml
 - include: config.yml
 - include: service.yml
+- include: sentinel.yml
+  when: redis_sentinel_install
