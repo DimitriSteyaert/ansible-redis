@@ -1,0 +1,9 @@
+{{ ansible_managed|comment }}
+
+/var/log/redis/redis-sentinel*.log {
+        weekly
+        missingok
+        rotate 12
+        compress
+        notifempty
+}

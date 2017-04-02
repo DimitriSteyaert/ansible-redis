@@ -1,0 +1,10 @@
+{{ ansible_managed|comment }}
+
+# redis-sentinel configure options
+
+# ULIMIT: Call ulimit -n with this argument prior to invoking Redis Sentinel
+# itself.  This may be required for high-concurrency environments. Redis
+# Sentinel itself cannot alter its limits as it is not being run as root.
+# (default: 65536)
+#
+ULIMIT={{ redis_sentinel_ulimit }}

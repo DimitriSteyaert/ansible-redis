@@ -8,3 +8,22 @@
     mode: 0640
   notify: "Restart Redis"
   when: redis_server_install
+
+- name: Set the Redis defaults file
+  template:
+    src: default/redis-server.j2
+    dest: /etc/default/redis-server
+    owner: root
+    group: root
+    mode: 0644
+  notify: "Restart Redis"
+  when: redis_server_install
+
+- name: Set the Redis logrotate file
+  template:
+    src: logrotate/redis-server.j2
+    dest: /etc/logrotate.d/redis-server
+    owner: root
+    group: root
+    mode: 0644
+  when: redis_server_install

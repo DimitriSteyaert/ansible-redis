@@ -8,3 +8,22 @@
     mode: 0640
   notify: "Restart Redis Sentinel"
   when: redis_sentinel_install
+
+- name: Set the Redis Sentinel defaults file
+  template:
+    src: default/redis-sentinel.j2
+    dest: /etc/default/redis-sentinel
+    owner: root
+    group: root
+    mode: 0644
+  notify: "Restart Redis Sentinel"
+  when: redis_sentinel_install
+
+- name: Set the Redis Sentinel logrotate file
+  template:
+    src: logrotate/redis-sentinel.j2
+    dest: /etc/logrotate.d/redis-sentinel
+    owner: root
+    group: root
+    mode: 0644
+  when: redis_sentinel_install
