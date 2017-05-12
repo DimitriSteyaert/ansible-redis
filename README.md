@@ -1,1 +1,174 @@
-# Placeholder until a real README can be created
+## Redis
+
+[![Ansible Galaxy](http://img.shields.io/badge/galaxy-DimitriSteyaert/redis-660198.svg?style=flat)](https://galaxy.ansible.com/detail#/role/DimitriSteyaert)
+
+
+This role installs and configures Redis server (with the version of your choice), Redis Sentinel and lets you setup a Redis replication set.
+
+### Installation
+
+This role requires at least Ansible `v1.9`. To install it, run:
+
+```Shell
+ansible-galaxy install DimitriSteyaert/redis
+```
+
+
+### Role variables
+
+List of default variables available in the inventory:
+
+```YAML
+---
+# General Redis parameters that apply to this role itself
+redis_server_install: true
+redis_version: latest
+redis_server_state: present
+redis_server_purge: no
+
+# Redis configuration parameters
+redis_bind_address: 127.0.0.1
+redis_protected_mode: 'yes'
+redis_port: 6379
+redis_loglevel: notice
+redis_logfile: /var/log/redis/redis-server.log
+redis_number_of_databases: 16
+redis_maxclients: 10000
+redis_maxmemory: 512mb
+redis_maxmemory_policy: noeviction
+redis_tcp_keepalive: 60
+redis_password: false
+redis_ulimit: 65536
+
+# Redis replication parameters
+redis_slaveof: false
+
+# General Redis Sentinel parameters
+redis_sentinel_install: false
+redis_sentinel_version: latest
+redis_sentinel_server_state: present
+redis_sentinel_server_purge: no
+
+# Sentinel configuration parameters
+redis_sentinel_bind_address: 127.0.0.1
+redis_sentinel_protected_mode: 'yes'
+redis_sentinel_port: 26379
+redis_sentinel_monitors:
+  - name: redis-cluster
+    host: 127.0.0.1
+    port: 6379
+    quorum: 2
+    down_after_milliseconds: 15000
+    failover_timeout: 120000
+    parallel_syncs: 1
+redis_sentinel_ulimit: 65536
+```
+
+
+### Detailed usage guide
+
+If you just enable this role on your machine(s) then you perform a basic Redis server installation with the latest version. But by tweaking the role variables you can choose to install another version of Redis server, install Sentinel as an additional service, just install Sentinal without the Redis server or setup replication. Just check the following examples to get an idea on how to realise this.
+#### Examples
+
+This is a basic playbook to install Redis with the default variables:
+
+```YAML
+---
+- hosts: all
+  roles:
+    - redis
+```
+
+If you wish to install a Redis server version that is not the latest available version from the package manager then you can define the ```redis_version``` variable like this:
+
+```YAML
+---
+redis_version: '2:3.0.0-1~dotdeb+jessie.1'
+```
+
+To entirely wipe your Redis server configuration you can set the following variables:
+
+```YAML
+---
+redis_server_state: absent
+redis_server_purge: yes
+```
+
+If in case you want to install a standalone Redis Sentinel without a Redis server then you should modify your variables like this:
+
+```YAML
+---
+redis_server_install: false
+redis_sentinel_install: true
+```
+
+If you want to install a full blown Redis replication set with Sentinels (which should consist of at least 3 servers as described in the best practices) you can follow this example:
+
+```YAML
+---
+- hosts: redis01
+  vars:
+    - redis_bind_address: "127.0.0.1 {{ hostvars['redis01'].ansible_eth0.ipv4.address }}"
+    - redis_password: SECURE_PASSWORD
+    - redis_slaveof: false
+    - redis_sentinel_install: true
+    - redis_sentinel_bind_address: "0.0.0.0"
+    - redis_sentinel_monitors:
+      - name: redis-cluster
+        host: 192.168.0.1
+        port: 6379
+        quorum: 2
+        down_after_milliseconds: 15000
+        failover_timeout: 120000
+        parallel_syncs: 1
+  roles:
+    - redis
+
+- hosts: redis02
+  vars:
+    - redis_bind_address: "127.0.0.1 {{ hostvars['redis02'].ansible_eth0.ipv4.address }}"
+    - redis_password: SECURE_PASSWORD
+    - redis_slaveof: "192.168.0.1 6379"
+    - redis_sentinel_install: true
+    - redis_sentinel_bind_address: "0.0.0.0"
+    - redis_sentinel_monitors:
+      - name: redis-cluster
+        host: 192.168.0.1
+        port: 6379
+        quorum: 2
+        down_after_milliseconds: 15000
+        failover_timeout: 120000
+        parallel_syncs: 1
+  roles:
+    - redis
+
+- hosts: redis03
+  vars:
+    - redis_bind_address: "127.0.0.1 {{ hostvars['redis03'].ansible_eth0.ipv4.address }}"
+    - redis_password: SECURE_PASSWORD
+    - redis_slaveof: "192.168.0.1 6379"
+    - redis_sentinel_install: true
+    - redis_sentinel_bind_address: "0.0.0.0"
+    - redis_sentinel_monitors:
+      - name: redis-cluster
+        host: 192.168.0.1
+        port: 6379
+        quorum: 2
+        down_after_milliseconds: 15000
+        failover_timeout: 120000
+        parallel_syncs: 1
+  roles:
+    - redis
+```
+
+### Authors and license
+
+The `redis` role was written by:
+
+- [Dimitri Steyaert](https://www.steyaert.be) | [e-mail](mailto:dimitri@steyaert.be) | [Twitter](https://twitter.com/DimitriSteyaert)
+
+License: [MIT](https://tldrlegal.com/license/mit-license)
+
+***
+
+README generated by [Ansigenome](https://github.com/nickjj/ansigenome/).

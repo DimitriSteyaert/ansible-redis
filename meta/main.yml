@@ -1,0 +1,36 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: 'Dimitri Steyaert'
+  description: 'Install Redis and/or Sentinel on your machine and configure a replication set'
+  company: 'Steyaert Web Services'
+  license: 'MIT'
+  min_ansible_version: '1.9'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+        - yakkety
+        - zesty
+    - name: Debian
+      versions:
+        - wheezy
+        - jessie
+  galaxy_tags:
+    - database
+    - development
+    - nosql
+    - redis
+    - replication
+    - sentinel
+
+ansigenome_info:
+  galaxy_id: 'DimitriSteyaert'
+  travis: False
+  synopsis: |
+    This role installs and configures Redis server (with the version of your choice), Redis Sentinel and lets you setup a Redis replication set.
+  usage: |
+    If you just enable this role on your machine(s) then you perform a basic Redis server installation with the latest version. But by tweaking the role variables you can choose to install another version of Redis server, install Sentinel as an additional service, just install Sentinal without the Redis server and setup replication. Just check the following examples to get an idea on how to realise this.
